@@ -63,13 +63,13 @@ def main():
         user_row_three = []
 
         for i in range(3):
-            user_row_one[i] = int(input(f"Row 1, Col {i+1}: \n"))
+            user_row_one.append(int(input(f"Row 1, Col {i+1}: \n")))
 
         for i in range(3):
-            user_row_two[i] = int(input(f"Row 1, Col {i+1}: \n"))
+            user_row_two.append(int(input(f"Row 1, Col {i+1}: \n")))
 
         for i in range(3):
-            user_row_three[i] = int(input(f"Row 1, Col {i+1}: \n"))
+            user_row_three.append(int(input(f"Row 1, Col {i+1}: \n")))
 
         puzzle = [user_row_one, 
                   user_row_two, 
@@ -82,15 +82,12 @@ def main():
 
     algochoice = int(input("Enter choice (1-3): \n"))
 
-    if algochoice == 1
+    if algochoice == 1:
+        general_search(puzzle, 1)
 
 
-def uniform_cost_search(puzzle, heuristic): 
 
 
-def 
 
-    
-    
-        
-    
+def general_search(puzzle, heuristic):
+    initial = Node(puzzle, )
