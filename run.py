@@ -74,6 +74,8 @@ def main():
         puzzle = [user_row_one, 
                   user_row_two, 
                   user_row_three]
+    for i in range(3): 
+        print(puzzle[i] + '\n')
     
     print("Puzzle loaded. Now Choose the algorithm to run:\n")
     print("1) Uniform Cost Search\n")
@@ -86,8 +88,58 @@ def main():
         general_search(puzzle, 1)
 
 
+def swap(state, r, c, r2, c2): 
+    result = []
+    for row in range(3):
+        copy_row = []
+        for col in range(3):
+            copy_row.append(state[row][col])
+        result.append(copy_row)
 
+    result[r][c] = result[r2][c2]
+    result[r2][c2] = result[r][c]
+    return result
+
+def expand(state): 
+    row0 = 0 
+    col0 = 0 
+    children = []
+
+    for row in range(3):
+        for col in range(3): 
+            if state[row][col] == 0; 
+                row0 = row
+                col0 = col
+    
+    if col0 > 0: 
+        children.append(swap(state, row0, col0, row0, col0 - 1))
+
+    if col0 < 2: 
+        children.append(swap(state, row0, col0, row0, col0 + 1))
+
+    if row0 > 0:
+        children.append(swap(state, row0, col0, row0 - 1, col0))
+
+    if row < 2: 
+        children.append(swap(state, row0, col0, row0 + 1, col0 ))
+    
+    return children
+            
+    
 
 
 def general_search(puzzle, heuristic):
-    initial = Node(puzzle, )
+    initial = Node(puzzle, 0, 0, None)
+    queue = [] 
+    heapq.heappush(queue, (initial.f, initial))
+
+    if not queue:
+        print('failure')
+        return None
+    
+    f, node = heapq.heappop(queue)
+
+    if node.state == goal: 
+        return node
+    
+
