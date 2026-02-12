@@ -84,8 +84,19 @@ def main():
 
     algochoice = int(input("Enter choice (1-3): \n"))
 
-    if algochoice == 1:
-        general_search(puzzle, 1)
+    while True:
+        if algochoice == 1:
+            result = general_search(puzzle, 0)
+            break
+        elif algochoice == 2: 
+            result = general_search(puzzle, misplaced_tiles)
+            break
+        elif algochoice == 3: 
+            result = general_search(puzzle, manhattan_distance)
+            break
+        else: 
+            print ("Please pick a choice (1-3): \n")
+
 
 
 def swap(state, r, c, r2, c2): 
@@ -107,7 +118,7 @@ def expand(state):
 
     for row in range(3):
         for col in range(3): 
-            if state[row][col] == 0; 
+            if state[row][col] == 0: 
                 row0 = row
                 col0 = col
     
@@ -125,7 +136,29 @@ def expand(state):
     
     return children
             
-    
+def misplaced_tiles(state): 
+    count = 0
+    for row in range(3):
+        for col in range(3):
+            if state[row][col] != goal[r][c] and state[row][col] != 0:
+                count += 1
+    return count
+
+def manhattan_distance(state): 
+    distance = 0
+    for row in range(3):
+        for col in range(3):
+            if state[row][col] != goal[row][col]:
+                if state[row][col] == 0:
+                    continue
+                goal_row = (state[row][col] - 1) // 3
+                goal_col = (state[row][col] - 1) % 3
+                distance += abs(goal_row - row)
+                distance += abs(goal_col - col)
+    return distance
+
+
+
 
 
 def general_search(puzzle, heuristic):
@@ -142,4 +175,7 @@ def general_search(puzzle, heuristic):
     if node.state == goal: 
         return node
     
+    children = expand(node.state)
 
+    for state in children:
+        child = Node(state, node.g + 1)
