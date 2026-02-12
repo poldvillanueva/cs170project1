@@ -184,18 +184,23 @@ def general_search(puzzle, heuristic):
     heapq.heappush(queue, (initial.f, initial))
     max_queue_size = len(queue)
     nodes_expanded = 0
+    beginning = True
 
     while True: 
         if not queue:
             print('failure')
             return None
-        
         if len(queue) > max_queue_size:
             max_queue_size = len(queue)
         f, node = heapq.heappop(queue)
 
-        print(f"The best state to expand with a g(n) = {node.g} and h(n) = {node.h}: ")
-        print_puzzle(node.state)
+        if beginning: 
+            print(f"Starting State: ")
+            print_puzzle(node.state)
+            beginning = False
+        else:
+            print(f"The best state to expand with a g(n) = {node.g} and h(n) = {node.h}: ")
+            print_puzzle(node.state)
 
         if node.state == goal: 
             print(f"Search depth: {node.g}") 
@@ -205,7 +210,6 @@ def general_search(puzzle, heuristic):
         
         children = expand(node.state)
         nodes_expanded += 1
-
         for state in children:
             child = Node(state, node.g + 1, heuristic(state), node)
             heapq.heappush(queue, (child.f, child))
