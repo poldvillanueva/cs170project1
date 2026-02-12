@@ -17,18 +17,19 @@ pmHard = [[1, 5, 2],
           [4, 8, 3],
           [7, 6, 0]]
 
-pmExtraHard = [[7, 5, 8],
-               [1, 3, 6],
-               [2, 4, 0]]
 
-pmExtraExtraHard = [[1, 4, 2],
-                    [3, 0, 8],
-                    [7, 6, 5]]
+pmExtraHard = [[1, 4, 2],
+               [3, 0, 8],
+               [7, 6, 5]]
+
+pmExtraExtraHard = [[7, 5, 8],
+                    [1, 3, 6],
+                    [2, 4, 0]]
 
 def main(): 
     choice = int(input("Welcome to Leo's 8-Puzzle Solver."                  #user prompt
-                   "Type '1' to use a pre-made puzzle," 
-                   "or '2' to create your own puzzle." + '\n'))
+                   " Type '1' to use a pre-made puzzle," 
+                   " or '2' to create your own puzzle." + '\n'))
     
 
     if choice == 1: 
