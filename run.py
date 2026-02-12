@@ -26,9 +26,9 @@ pmExtraExtraHard = [[1, 4, 2],
                     [7, 6, 5]]
 
 def main(): 
-    choice = input("Welcome to Leo's 8-Puzzle Solver." 
+    choice = int(input("Welcome to Leo's 8-Puzzle Solver." 
                    "Type '1' to use a pre-made puzzle," 
-                   "or '2' to create your own puzzle." + '\n')
+                   "or '2' to create your own puzzle." + '\n'))
     
 
     if choice == 1: 
@@ -37,22 +37,27 @@ def main():
             if difficulty == 1: 
                 print("Selected 1: Easy!\n")
                 puzzle = pmEasy
+                print_puzzle(puzzle)
                 break
             elif difficulty == 2: 
                 print("Selected 2: Medium!\n")
                 puzzle = pmMedium
+                print_puzzle(puzzle)
                 break
             elif difficulty == 3: 
                 print("Selected 3: Hard!\n")
                 puzzle = pmHard
+                print_puzzle(puzzle)
                 break
             elif difficulty == 4: 
                 print("Selected 4: Extra Hard!\n")
                 puzzle = pmExtraHard
+                print_puzzle(puzzle)
                 break
             elif difficulty == 5: 
                 print("Selected 2: Extra Extra Hard!\n")
                 puzzle = pmExtraExtraHard
+                print_puzzle(puzzle)
                 break
             else: 
                 print("Please Pick a valid input (0 to 5)")
@@ -74,8 +79,7 @@ def main():
         puzzle = [user_row_one, 
                   user_row_two, 
                   user_row_three]
-    for i in range(3): 
-        print(puzzle[i] + '\n')
+        print_puzzle(puzzle)
     
     print("Puzzle loaded. Now Choose the algorithm to run:\n")
     print("1) Uniform Cost Search\n")
@@ -86,7 +90,7 @@ def main():
 
     while True:
         if algochoice == 1:
-            result = general_search(puzzle, 0)
+            result = general_search(puzzle, uniform_cost_search)
             break
         elif algochoice == 2: 
             result = general_search(puzzle, misplaced_tiles)
@@ -99,16 +103,24 @@ def main():
 
 
 
-def swap(state, r, c, r2, c2): 
+
+def print_puzzle(puzzle): 
+    for i in range(0, 3): 
+        print(puzzle[i])
+    print("\n")
+
+
+def swap(state, row, col, row2, col2): 
     result = []
-    for row in range(3):
+    for r in range(3):
         copy_row = []
-        for col in range(3):
-            copy_row.append(state[row][col])
+        for c in range(3):
+            copy_row.append(state[r][c])
         result.append(copy_row)
 
-    result[r][c] = result[r2][c2]
-    result[r2][c2] = result[r][c]
+    tmp = result[row][col]
+    result[row][col] = result[row2][col2]
+    result[row2][col2] = tmp
     return result
 
 def expand(state): 
@@ -131,16 +143,21 @@ def expand(state):
     if row0 > 0:
         children.append(swap(state, row0, col0, row0 - 1, col0))
 
-    if row < 2: 
+    if row0 < 2: 
         children.append(swap(state, row0, col0, row0 + 1, col0 ))
     
     return children
             
+
+def uniform_cost_search(state): 
+    return 0
+
+
 def misplaced_tiles(state): 
     count = 0
     for row in range(3):
         for col in range(3):
-            if state[row][col] != goal[r][c] and state[row][col] != 0:
+            if state[row][col] != goal[row][col] and state[row][col] != 0:
                 count += 1
     return count
 
@@ -162,20 +179,37 @@ def manhattan_distance(state):
 
 
 def general_search(puzzle, heuristic):
-    initial = Node(puzzle, 0, 0, None)
+    initial = Node(puzzle, 0, heuristic(puzzle), None)
     queue = [] 
     heapq.heappush(queue, (initial.f, initial))
+    max_queue_size = len(queue)
+    nodes_expanded = 0
 
-    if not queue:
-        print('failure')
-        return None
-    
-    f, node = heapq.heappop(queue)
+    while True: 
+        if not queue:
+            print('failure')
+            return None
+        
+        if len(queue) > max_queue_size:
+            max_queue_size = len(queue)
+        f, node = heapq.heappop(queue)
 
-    if node.state == goal: 
-        return node
-    
-    children = expand(node.state)
+        print(f"The best state to expand with a g(n) = {node.g} and h(n) = {node.h}: ")
+        print_puzzle(node.state)
 
-    for state in children:
-        child = Node(state, node.g + 1)
+        if node.state == goal: 
+            print(f"Search depth: {node.g}") 
+            print(f"Number of Nodes Expanded: {nodes_expanded}")
+            print(f"Max queue size: {max_queue_size}" )
+            return node
+        
+        children = expand(node.state)
+        nodes_expanded += 1
+
+        for state in children:
+            child = Node(state, node.g + 1, heuristic(state), node)
+            heapq.heappush(queue, (child.f, child))
+
+
+if __name__ == "__main__":
+    main()
