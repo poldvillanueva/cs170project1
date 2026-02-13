@@ -6,17 +6,16 @@ goal = [[1, 2, 3],              #hardcoded goal state and pre made puzzle states
         [7, 8, 0]]
 
 pmEasy = [[1, 2, 3],
-          [4, 5, 0],
-          [7, 8, 6]]
+          [4, 5, 6],
+          [0, 7, 8]]
 
-pmMedium = [[1, 0, 2],
-            [4, 5, 3],
-            [7, 8, 6]]
+pmMedium = [[1, 3, 6],
+            [5, 0, 2],
+            [4, 7, 8]]
 
 pmHard = [[1, 5, 2],
           [4, 8, 3],
           [7, 6, 0]]
-
 
 pmExtraHard = [[1, 4, 2],
                [3, 0, 8],
@@ -90,7 +89,7 @@ def main():
 
     algochoice = int(input("Enter choice (1-3): \n"))
 
-    while True:
+    while True:                                                               #calls for the general search function with the puzzle and heuristic choice
         if algochoice == 1:
             result = general_search(puzzle, uniform_cost_search)
             break
@@ -103,7 +102,7 @@ def main():
         else: 
             print ("Please pick a choice (1-3): \n")
     
-    if result:
+    if result:                                                                  #concluding the program                                                               
         print("Search Complete! Goodbye\n")
     else: 
         print("No solution found.")
